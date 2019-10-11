@@ -12,6 +12,9 @@ class Obj3d{
     //this.program=program;
   }
 
+	setModelMatrix(modelMatrix){
+		mat4.copy(this.modelMatrix,modelMatrix);
+	}
   add_son(obj){
       this.sons.push(obj);
   }

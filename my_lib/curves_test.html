@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<canvas id="myCanvas" width="1100" height="600" style="border:3px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.
+</canvas>
+
+<script>
+
+
+
+	var c=document.getElementById("myCanvas");
+
+	var ctx=c.getContext("2d");
+
+
+	// Definimos las Bases de Berstein, dependen de u
+
+	var Base0=function(u) { return (1-u)*(1-u)*(1-u);}  // 1*(1-u) - u*(1-u) = 1-2u+u2  ,  (1-2u+u2) - u +2u2- u3 ,  1 - 3u +3u2 -u3
+
+	var Base1=function(u) { return 3*(1-u)*(1-u)*u; }    //
+
+	var Base2=function(u) { return 3*(1-u)*u*u;}     //   -u3 +3u2
+
+	var Base3=function(u) { return u*u*u; }			 // u3
+
+
+	// Bases derivada primera
+
+	var Base0der=function(u) { return -3*u*u+6*u-3;} 	//-3u2 +6u -3
+
+	var Base1der=function(u) { return 9*u*u-12*u+3; }  // 9u2 -12u +3
+
+	var Base2der=function(u) { return -9*u*u+6*u;}		 // -9u2 +6u
+
+	var Base3der=function(u) { return 3*u*u; }			// 3u2
+
+
+
+	// Bases derivada segunda
+
+	var Base0der2=function(u) { return -6*u+6;} 		//-6u +6
+
+	var Base1der2=function(u) { return 18*u-12; }  		// 18u-12
+
+	var Base2der2=function(u) { return 6-18*u;}		 // -18u +6
+
+	var Base3der2=function(u) { return 6*u; }			// 6u
+
+	// 4 Puntos de control P0, P1, P2 y P3
+	// Modificarlos para obtener otra curva
+
+
+	var P0x=100; var P0y=550;
+	var P1x=200; var P1y=100;
+	var P2x=800; var P2y=100;
+	var P3x=800; var P3y=550;
+/*
+	var P0x=200; var P0y=100;
+	var P1x=400; var P1y=200;
+	var P2x=600; var P2y=200;
+	var P3x=800; var P3y=100;
+
+*/
+
+	var currentU=0;
+
+	var CurvaBezier=function (u){
+
+		var punto=new Object();
+
+		punto.x=Base0(u)*P0x+Base1(u)*P1x+Base2(u)*P2x+Base3(u)*P3x;
+		punto.y=Base0(u)*P0y+Base1(u)*P1y+Base2(u)*P2y+Base3(u)*P3y;
+
+		return punto;
+	}
+
+	var CurvaBezierDerivadaPrimera=function (u){
+
+		var punto=new Object();
+
+		punto.x=Base0der(u)*P0x+Base1der(u)*P1x+Base2der(u)*P2x+Base3der(u)*P3x;
+		punto.y=Base0der(u)*P0y+Base1der(u)*P1y+Base2der(u)*P2y+Base3der(u)*P3y;
+
+		return punto;
+	}
+
+
+	// sobre que representa la derivada segunda
+	// http://math.stackexchange.com/questions/1250070/what-does-the-2nd-degree-derivative-of-a-cubic-bezier-curve-actually-represent
+
+	var CurvaBezierDerivadaSegunda=function (u){
+
+		var punto=new Object();
+
+		punto.x=Base0der2(u)*P0x+Base1der2(u)*P1x+Base2der2(u)*P2x+Base3der2(u)*P3x;
+		punto.y=Base0der2(u)*P0y+Base1der2(u)*P1y+Base2der2(u)*P2y+Base3der2(u)*P3y;
+
+		return punto;
+	}
+
+	function dibujarCurva(){
+
+		// devuelve un punto de la curva segun el parametro u entre 0 y 1
+
+
+
+		ctx.lineWidth=2;
+		// Dibujamos la curva en color azul, entre u=0 y u=1 con deltaU
+
+		var deltaU=0.01; // es el paso de avance sobre la curva cuanto mas chico mayor es el detalle
+						 // u=0.05 son 20 segmentos (0.05=1/20)
+		ctx.clearRect ( 0 , 0 ,1000 , 1000 );
+		ctx.beginPath();
+		ctx.moveTo(P0x,P0y);
+		for (u=0;u<=1.001;u=u+deltaU){
+			// Tengo que calcular la posicion del punto c(u)
+
+			var punto=CurvaBezier(u);
+
+			ctx.lineTo(punto.x,punto.y);// hago una linea desde el ultimo lineTo hasta x,y
+
+			//console.log("C("+u+")= "+punto.x+","+punto.y);
+		}
+		ctx.strokeStyle="#0000FF";
+		ctx.stroke();
+
+
+
+		// Dibujo el grafo de control en color rojo, solo para verificar donde esta cada punto de control
+
+		ctx.beginPath();
+		ctx.moveTo(P0x,P0y);
+		ctx.lineTo(P1x,P1y);
+		ctx.lineTo(P2x,P2y);
+		ctx.lineTo(P3x,P3y);
+		ctx.strokeStyle="#FF0000";
+		ctx.stroke();
+
+
+	}
+
+	function dibujarVector(x1,y1,x2,y2,color){
+
+		ctx.beginPath();
+		ctx.moveTo(x1,y1);
+		ctx.lineTo(x1+x2,y1+y2);
+		ctx.strokeStyle=color;
+		ctx.stroke();
+	}
+
+
+     function animate() {
+		dibujarCurva();
+
+		var punto=CurvaBezier(currentU);
+		requestAnimationFrame( animate );
+
+		currentU+=0.002;
+		ctx.lineWidth=5;
+		ctx.beginPath();
+		ctx.arc(punto.x,punto.y,10,0,2*Math.PI);
+		ctx.strokeStyle="#00FF00";
+		ctx.stroke();
+
+		// dibujo el vector tangente de la curva
+		var der=CurvaBezierDerivadaPrimera(currentU);
+		var modulo=Math.sqrt(der.x*der.x+der.y*der.y);
+		der.x=der.x*50/modulo;
+		der.y=der.y*50/modulo;
+
+		dibujarVector(punto.x,punto.y,der.x,der.y,"#FF00FF");
+
+		// dibujo el vector Normal de la curva, que se obtiene rotando la tangente 90 grados
+
+		var normal={
+			"x":-der.y,
+			"y":der.x
+		}
+
+
+
+		dibujarVector(punto.x,punto.y,normal.x,normal.y,"#00FFFF");
+
+		if (currentU>1) currentU=0;
+	}
+
+	animate();
+
+
+</script>
+
+</body>
+</html>
