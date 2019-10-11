@@ -20,11 +20,6 @@ class Obj3d{
   }
   hello(){
     console.log("hi, I'm alive");
-    var  a="variable";
-    console.log(a);
-  }
-  setMe(){
-
   }
   drawScene(glProgram,fatherMatrix){
   	this.fatherMatrix=fatherMatrix;
@@ -44,7 +39,7 @@ class Obj3d{
 	this.drawMe(glProgram);
   }
   drawMe(glprogram){
-      setupVertexShaderMatrix(this.finalMatrix);
+      setupVertexShaderMatrix(this.finalMatrix, glProgram);
 
       this.vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
       gl.enableVertexAttribArray(this.vertexPositionAttribute);
@@ -78,6 +73,16 @@ class Obj3d{
   }
 }
 
+function setupVertexShaderMatrix(modelMatrix, glProgram){
+var modelMatrixUniform = gl.getUniformLocation(glProgram, "modelMatrix");
+var viewMatrixUniform  = gl.getUniformLocation(glProgram, "viewMatrix");
+var projMatrixUniform  = gl.getUniformLocation(glProgram, "projMatrix");
+
+gl.uniformMatrix4fv(modelMatrixUniform, false, modelMatrix);
+gl.uniformMatrix4fv(viewMatrixUniform, false, viewMatrix);
+gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
+}
+
 //====================  Not mine =======================
 
 var gl = null,
@@ -98,6 +103,7 @@ var projMatrix = mat4.create();
 
 // ========================== Uniform Grid ================================
 
+//Crea un grid uniforme para el triangle strip. Utilizado en superficies de varrido y revolucion.
 function create_index_buffer(rows,cols){
 
 	COLUNAS=cols;
@@ -152,5 +158,6 @@ function create_plane_grid(rows,cols){
 			 };
 		};
 
+		//retorna el color y posicion de los buffers
 		return [position_buffer, color_buffer];
 }

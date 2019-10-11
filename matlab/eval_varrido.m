@@ -5,8 +5,8 @@ pts(4,:)=ones(1,length(pts)); %agregando uma fila de 1 no final
 curve_pts(4,:)=ones(1,length(curve_pts));
 
 for i=1:length(grd)
-    transformMatrix=find_transform(grd(:,i),normal_vector);
-    transformMatrix(:,end)=curve_pts(:,i)';
+    transformMatrix=find_transform(grd(:,i),normal_vector); %encontrando rotacion
+    transformMatrix(:,end)=curve_pts(:,i)'; %Translacion 
     transform_pts(:,:,i)=transformMatrix*pts;
 end
 

@@ -30,6 +30,7 @@ obj1.add_son(obj3);
 
 //mat4.translate(obj3.modelMatrix, modelMatrix, new vec3.fromValues(3,0,0));
 
+//funcion que inicia el WebGL ejecurando funciones del archivo webGL_functions
 function initWebGL(){
     canvas = document.getElementById("my-canvas");
     try{
@@ -53,15 +54,8 @@ function initWebGL(){
 
 }
 
-function setupVertexShaderMatrix(modelMatrix){
-var modelMatrixUniform = gl.getUniformLocation(glProgram, "modelMatrix");
-var viewMatrixUniform  = gl.getUniformLocation(glProgram, "viewMatrix");
-var projMatrixUniform  = gl.getUniformLocation(glProgram, "projMatrix");
-
-gl.uniformMatrix4fv(modelMatrixUniform, false, modelMatrix);
-gl.uniformMatrix4fv(viewMatrixUniform, false, viewMatrix);
-gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
-}
+//=============== Funciones de animacion ========================
+//Cada objecto para ser animado necesita una funcion de animacion que va a modificar su matriz de modelado
 
 function animate_obj1(){
     var transformMatrix=mat4.create();
@@ -96,18 +90,20 @@ function animate_obj3(){
     obj3.setModelMatrix(transformMatrix);
 }
 
+// Funcion llamada a cada frame
 function tick(){
 
 requestAnimationFrame(tick);
-drawAll();
+drawAll(); //esta funcion llama a los objectos que van a ser dibujados
+//Las funciones de animacion deben ser llamadas acá
 animate_obj1();
 animate_obj2();
 animate_obj3()
 }
 
 function drawAll(){
-	var mat=mat4.create();
+	var mat=mat4.create(); //esta matriz es pasada a los objectos padres (porque todos los objectos la necesitan receber)
 	mat4.identity(mat);
-    obj1.drawScene(glProgram,mat);
-    //obj2.drawScene(glProgram,mat);
+  obj1.drawScene(glProgram,mat);
+  //obj2.drawScene(glProgram,mat);
 }
