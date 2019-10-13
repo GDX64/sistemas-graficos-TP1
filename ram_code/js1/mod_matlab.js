@@ -33,4 +33,11 @@ function rot(angle,axis){
 
 
 
-
+//esta no es de matlab xD
+function arrayToVec3(array){
+	n=array.length();
+	for (var i =0; i<n; i++){
+		array[i]=vec3.fromValues(array[i]);
+	}
+	return array;
+}
