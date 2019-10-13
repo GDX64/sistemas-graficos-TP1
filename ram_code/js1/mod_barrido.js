@@ -1,19 +1,3 @@
-function linspace(ini,fin,n){
-	var x=[]
-	var delta= fin-ini/n
-	for (var i=0; i<n ;i++){
-		 x.push(ini+delta*i);
-	        };
-	return x;
-};
-function zeros(n){
-	return linspace(0,0,n);
-};
-function ones(n){
-	return linspace(1,1,n);
-};
-
-
 var N=100;
 var t=linspace(0,2*Math.PI,N);
 
