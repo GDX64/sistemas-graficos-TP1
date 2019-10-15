@@ -13,7 +13,7 @@ z=zeros(1,N);
 pts=[x,;y;z]; normal_vector=[0 0 1];
 
 %pontos de controle
-w1=[1,3,5,7; 0,1,1,0];
+w1=[1,3,5,7; 0,0,0,0];
 w1(3,1)=0; %agregando linha de 0
 [curve_pts] = cubic_bezier_cat(w1,N);
 
@@ -24,7 +24,7 @@ hold
 plot(w1(1,:),w1(2,:),'*')
 plot(w1(1,:),w1(2,:))
 
-transform_pts = eval_varrido(pts*5, pts, normal_vector);
+transform_pts = eval_varrido(curve_pts, pts*0.5, normal_vector);
 
 figure
 hold on
@@ -38,12 +38,12 @@ end
 X=transform_pts(1:3,:);
 X=X(:);
 
-fileID = fopen('vertex_data.js','w');
-fprintf(fileID,'var vertex_data = [\n');
+fileID = fopen('carr_data.js','w');
+fprintf(fileID,'var carr_data = [\n');
 fprintf(fileID,'%6.2f,',X(1:end-1));
 fprintf(fileID,'%6.2f ]\n', X(end));
 
-fprintf(fileID,'var ROWS_NUMBER = %i;\n var COLS_NUMBER = %i \n', size(transform_pts,3), size(transform_pts,2));
+fprintf(fileID,'var CARR_ROWS_NUMBER = %i;\n var CARR_COLS_NUMBER = %i \n', size(transform_pts,3), size(transform_pts,2));
 fclose(fileID);
 
 

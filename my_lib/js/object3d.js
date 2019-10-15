@@ -5,6 +5,7 @@ class Obj3d{
     this.index=index;
     this.modelMatrix=mat4.create();
 		mat4.copy(this.modelMatrix,modelMatrix);
+		this.preModelMatrix=mat4.create();
     this.fatherMatrix=null;
 		this.finalMatrix=null;
     this.sons=[];
@@ -36,6 +37,8 @@ class Obj3d{
 		}
 	}
 
+	//aplicando premodelo
+	mat4.multiply(this.finalMatrix,this.finalMatrix,this.preModelMatrix);
 	this.drawMe(glProgram);
   }
   drawMe(glprogram){
