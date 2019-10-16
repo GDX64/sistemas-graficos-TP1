@@ -1,53 +1,53 @@
-var N=100;
-var t=linspace(0,2*Math.PI,N);
+function SuperficieDeBarrido(){
+	this.Vertices=null;
+	this.Normales=null;
+	this.rows=0;
+	this.cols=0;
+};
+
+
+var n=100;	// "cols"
+var m=50;	// "rows"
 
 // Forma/ perfil do varrido
-var forma=circulo(1.0,N)
+var forma=ObjetoForma();
+	forma.vertices=circulo(n,1.0);
+	forma.normales=circuloNormales(n,1.0);
 
 //Trayectoria
-w1=[1,3,5,7; 0,1,1,0];
-w1(3,1)=0; //agregando linha de 0
+var tray=ObjetoTrayectoria();
+	pnts=[[0,0,0],[0,1,0.5],[1,2,1],[-1,0.5,2]];
+	tray.vertices = bezier3(m,pnts);
+	tray.tangentes= bezier3_deriv_normalizadas(m,pnts);
 
-[curve_pts] = cubic_bezier_cat(w1,N);
+SuperfBarrida = barrer(forma,trayectoria,tray_tangente,tray_binormal);
 
-trayectoria=bezier3(N,p_control)
-//plotando curva do caminho
-figure
-plot(curve_pts(1,:),curve_pts(2,:))
-hold
-plot(w1(1,:),w1(2,:),'*')
-plot(w1(1,:),w1(2,:))
+function barrer(forma,tray,tray_tang,tray_binorm){
+	var n=forma.length();
+	var m=trayectoria.length();
 
-transform_pts = eval_varrido(pts*5, pts, normal_vector);
+	var vertex=[];
+	for (var i=0; i<m;i++){
+		norm  = vec3.CrossProd(forma.normal, tray.tangentes[i])
+		angulo= Math.acos( vec3.dot((forma.normal, tray.tangentes[i]))  / vec3.norm(forma.normal, tray.tangentes[i]) )
+		
+		M=mat4.create();
+		
+		scale(M,M,tray.escalado[i];
+		translate(M,M,tray.vertices[i]);
+		rotate(M,M,angulo, norm)
+		
+		for (j=0;j<n;j++){
+		
+			vertex.push( mat4.transform() );
+						
+		};
+	};
+}
 
-figure
-hold on
-for i=1:size(transform_pts,3)
-    plot3(transform_pts(1,:,i),transform_pts(2,:,i),transform_pts(3,:,i), 'k')
-    grid on
-    xlabel('X'); ylabel('Y'); zlabel('Z')
-end
-
-// export
-X=transform_pts(1:3,:);
-X=X(:);
-
-fileID = fopen('vertex_data.js','w');
-fprintf(fileID,'var vertex_data = [\n');
-fprintf(fileID,'//6.2f,',X(1:end-1));
-fprintf(fileID,'//6.2f ]\n', X(end));
-
-fprintf(fileID,'var ROWS_NUMBER = //i;\n var COLS_NUMBER = %i \n', size(transform_pts,3), size(transform_pts,2));
-fclose(fileID);
-
-
-
-
-function transform_pts = eval_varrido(curve_pts, pts, normal_vector)
-
-grd=gradient(curve_pts);
-pts(4,:)=ones(1,length(pts)); %agregando uma fila de 1 no final
-curve_pts(4,:)=ones(1,length(curve_pts));
+//	grd=gradient(curve_pts);
+//	pts(4,:)=ones(1,length(pts)); %agregando uma fila de 1 no final
+//	curve_pts(4,:)=ones(1,length(curve_pts));
 
 for i=1:length(grd)
     transformMatrix=find_transform(grd(:,i),normal_vector); %encontrando rotacion

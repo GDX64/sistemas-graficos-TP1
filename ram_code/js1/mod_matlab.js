@@ -31,6 +31,29 @@ function rot(angle,axis){
 	return R;
 }
 
+function distancia3D(pnt1,pnt2){
+	var dx=(pnt1[0]-pnt2[0])
+	var dy=(pnt1[1]-pnt2[1])
+	var dz=(pnt1[2]-pnt2[2])
+
+	return  Math.sqrt(dx*dx + dy*dy + dz*dz)  ;	
+	};
+
+
+function grad3D(pnts){
+	var n= pnts.length();
+	
+	var dp=[[ pnts[1][0]-pnts[0][0],pnts[1][1]-pnts[0][1],pnts[1][2]-pnts[0][2]  ]];
+	for (var i=1;i<n-1;i++){
+		dp.push([0.5*(pnts[i+1][0]-pnts[i-1][0]),
+			 0.5*(pnts[i+1][1]-pnts[i-1][1]),
+		  	 0.5*(pnts[i+1][2]-pnts[i-1][2]) ])
+	};
+
+	dp.push([ pnts[n-1][0]-pnts[n-2][0],pnts[n-1][1]-pnts[n-2][1],pnts[n-1][2]-pnts[n-2][2]  ]);
+	return dp;
+}
+
 
 
 //esta no es de matlab xD

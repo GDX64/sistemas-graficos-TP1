@@ -1,7 +1,27 @@
+function ObjetoForma(){
+
+	this.vertices=null;
+	this.normales=null;
+
+	this.VecTangen=[1.0,0.0,0.0];
+	this.VecBiNorm=[0.0,1.0,0.0];
+	this.VecNormal=[0.0,0.0,1.0];
+}
+
+
 function circulo(r,n){
         var dalpha=2*Math.PI/n;
         var x=[];
         for (var i=0; i<n ;i++){
+                x.push([Math.cos(dalpha*i)*r, Math.sin(dalpha*i)*r, 0.0]);
+        };
+        return x;
+};
+function circuloNormales(r,n){
+        var dalpha=2*Math.PI/n;
+        var x=[];
+        for (var i=0; i<n ;i++){
+		
                 x.push([Math.cos(dalpha*i)*r, Math.sin(dalpha*i)*r, 0.0]);
         };
         return x;
