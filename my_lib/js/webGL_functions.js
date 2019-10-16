@@ -15,7 +15,7 @@ mat4.identity(modelMatrix);
 mat4.rotate(modelMatrix,modelMatrix, -1.57078, [1.0, 0.0, 0.0]);
 
 mat4.identity(viewMatrix);
-mat4.translate(viewMatrix,viewMatrix, [0.0, 0.0, -10.0]);
+mat4.translate(viewMatrix,viewMatrix, [0.0, 0.0, -20.0]);
 }
 
 function initShaders(){

@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Ejemplo 02 VBO</title>
+        <style>
+            body{ background-color: grey; }
+            canvas{ background-color: white; }
+			textarea{ background-color: black; foreground-color: white;}
+        </style>
+    </head>
+
+    <body>
+		<center>
+
+			<h1>Sistemas Gr�ficos - 66.71</h1>
+			<h2>WebGL Ejemplo 02 - Vertex Array Objects "VBOs"</h2>
+
+			<canvas id="my-canvas" width="900" height="500">
+			Your browser does not support the HTML5 canvas element.
+			</canvas>
+
+		</center>
+
+        <!-- ************       vertex shader        ***************** !-->
+
+        <script id="shader-vs" type="x-shader/x-vertex">
+						attribute vec3 aVertexPosition;
+						attribute vec3 aVertexColor;
+
+						uniform mat4 modelMatrix;
+						uniform mat4 viewMatrix;
+						uniform mat4 projMatrix;
+
+						varying highp vec4 vColor;
+            void main(void) {
+                gl_Position = projMatrix * viewMatrix * modelMatrix *vec4(aVertexPosition, 1.0);
+                vColor = vec4(aVertexColor, 1.0);
+            }
+        </script>
+
+        <!-- ************       fragment shader       **************** !-->
+
+        <script id="shader-fs" type="x-shader/x-fragment">
+            varying highp vec4 vColor;
+            void main(void) {
+               gl_FragColor = vColor;
+            }
+        </script>
+
+				<script type="text/javascript" src="js/gl-matrix.js"></script>
+				<script src="./js/object3d.js"></script>
+				<script src="./js/webGL_functions.js"></script>
+				<script src="./js/vertex_data.js"></script>
+				<script src="./js/carr_data.js"></script>
+				<script src="./js/carr_animation.js"></script>
+
+        <script>
+
+            window.onload=initWebGL;
+        </script>
+    </body>
+</html>
