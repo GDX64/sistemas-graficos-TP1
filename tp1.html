@@ -33,10 +33,10 @@
    	<script src="js1/mod_matlab.js"></script>
    	<script src="js1/mod_claseObjeto3D.js"></script>
    	<script src="js1/mod_camara.js"></script>
-		<script src="./js_gabriel/object3d.js"></script>
-		<script src="./js_gabriel/carr_data.js"></script>
-		<script src="./js_gabriel/vertex_data.js"></script>
-		<script src="./js_gabriel/carr_animation.js"></script>
+		<script src="js1/object3d.js"></script>
+		<script src="js1/carr_data.js"></script>
+		<script src="js1/vertex_data.js"></script>
+		<script src="js1/carr_animation.js"></script>
 
 
        <script>
@@ -104,9 +104,9 @@
                     initShaders();
                     setupBuffers();
                     setupVertexShaderMatrix();
-										rueda.setupBuffers(gl);
-										palo_rueda.setupBuffers(gl);
-						        setup_sillas(gl);
+					rueda.setupBuffers(gl);
+					palo_rueda.setupBuffers(gl);
+					setup_sillas(gl);
                     tick();
 
                 }else{
@@ -181,6 +181,8 @@
 		var suelo= new MiObjeto3D();
 		var cielo= new MiObjeto3D();
 
+		var calecita= new MiObjeto3D();
+
 
 	function setupBuffers(){
 
@@ -241,7 +243,7 @@
 				suelo.dibujar()
 
 				// Draw Cielo
-        cielo.dibujar();
+        		cielo.dibujar();
 
 
     }
