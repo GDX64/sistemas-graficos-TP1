@@ -6,14 +6,14 @@ class Silla extends Obj3d {
     this.angle = angle;
   }
 	animate(){
-	    var transformMatrix=mat4.create();
-			var transform2=mat4.create();
-	    mat4.identity(transformMatrix);
-	  	mat4.translate(transformMatrix, transformMatrix, new vec3.fromValues(5,0,0));
-			mat4.rotate(transformMatrix,transformMatrix, rotate_speed*5, [0.0, 0.0, 1.0]);
-			mat4.rotate(transform2,transform2, this.angle, [0,1,0])
-			mat4.multiply(transformMatrix, transform2, transformMatrix)
-	    this.modelMatrix=transformMatrix;
+    var transformMatrix=mat4.create();
+		var transform2=mat4.create();
+    mat4.identity(transformMatrix);
+  	mat4.translate(transformMatrix, transformMatrix, new vec3.fromValues(5,0,0));
+		mat4.rotate(transformMatrix,transformMatrix, rotate_speed*5, [0.0, 0.0, 1.0]);
+		mat4.rotate(transform2,transform2, this.angle, [0,1,0])
+		mat4.multiply(transformMatrix, transform2, transformMatrix)
+    this.modelMatrix=transformMatrix;
 	}
 }
 
@@ -24,7 +24,7 @@ var elevation = 0.01;
 
 var data_vector=create_plane_grid(ROWS_NUMBER,COLS_NUMBER);
 var strip_index=create_index_buffer(ROWS_NUMBER,COLS_NUMBER);
-var index = [ 0, 1, 2, 0, 2, 3, 0, 3, 4, 0, 4, 5, 0, 5, 6, 0, 6, 1 ];
+
 var rueda=new Obj3d(vertex_data,data_vector[0], strip_index, modelMatrix);
 mat4.rotate(rueda.preModelMatrix,rueda.preModelMatrix, Math.PI/2, [1.0, 0.0, 0.0]);
 scale_factor=1;
@@ -36,10 +36,14 @@ var strip_index=create_index_buffer(CARR_ROWS_NUMBER,CARR_COLS_NUMBER);
 //Palo en el centro de las sillas voladoras
 var palo_rueda=new Obj3d(carr_data,data_vector[0], strip_index, modelMatrix);
 mat4.rotate(palo_rueda.preModelMatrix, palo_rueda.preModelMatrix, -Math.PI*(1/2),[0,0,1]);
-var scale_factor=1.5;
-mat4.scale(palo_rueda.preModelMatrix,palo_rueda.preModelMatrix,[1,scale_factor,scale_factor]);
+var scale_factor=2;
+mat4.scale(palo_rueda.preModelMatrix,palo_rueda.preModelMatrix,[scale_factor,scale_factor,scale_factor]);
+scale_factor=0.5;
+mat4.scale(palo_rueda.modelMatrix,palo_rueda.modelMatrix,[scale_factor,scale_factor,scale_factor]);
+mat4.translate(palo_rueda.modelMatrix,palo_rueda.modelMatrix, new vec3.fromValues(0,10,0));
 
 palo_rueda.add_son(rueda);
+
 //============= Loop para crear todas las sillas: ==========================
 var sillas=[];
 var NUMERO_SILLAS = 12;
@@ -65,7 +69,7 @@ function setup_sillas(){
 
 
 //funcion que inicia el WebGL ejecurando funciones del archivo webGL_functions
-function initWebGL(){
+function gabriel_initWebGL(){
     canvas = document.getElementById("my-canvas");
     try{
         gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
@@ -77,9 +81,6 @@ function initWebGL(){
 
         setupWebGL();
         initShaders();
-        rueda.setupBuffers(gl);
-				palo_rueda.setupBuffers(gl);
-        setup_sillas(gl);
         tick();
 
     }else{
@@ -96,8 +97,8 @@ function animate_rueda(){
 		var tr2=mat4.create();
 		elevation+=0.05;
     rotate_angle += rotate_speed;
-    mat4.rotate(transformMatrix,transformMatrix, rotate_angle, [0.0, 1.0, 0.0])
-		mat4.rotate(tr2,tr2, Math.sin(elevation)*0.3, [0.0, 0.0, 1.0]);
+    mat4.rotate(transformMatrix,transformMatrix, rotate_angle, [0.0, 1.0, 0.3])
+		//mat4.rotate(tr2,tr2, Math.sin(elevation)*0.3, [0.0, 0.0, 1.0]);
 		mat4.multiply(rueda.modelMatrix, tr2, transformMatrix);
 
 }
@@ -105,7 +106,7 @@ function animate_rueda(){
 
 
 // Funcion llamada a cada frame
-function tick(){
+function gabriel_tick(){
 
 requestAnimationFrame(tick);
 drawAll(); //esta funcion llama a los objectos que van a ser dibujados

@@ -42,7 +42,7 @@ class Obj3d{
 	this.drawMe(glProgram);
   }
   drawMe(glprogram){
-      setupVertexShaderMatrix(mat4.create(), this.finalMatrix, glProgram);
+      this.setupVertexShaderMatrix(mat4.create(), this.finalMatrix, glProgram);
 
       this.vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
       gl.enableVertexAttribArray(this.vertexPositionAttribute);
@@ -74,18 +74,18 @@ class Obj3d{
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.trianglesIndexBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index), gl.STATIC_DRAW);
   }
-}
 
-function setupVertexShaderMatrix(normalMatrix,modelMatrix, glProgram){
-var modelMatrixUniform = gl.getUniformLocation(glProgram, "modelMatrix");
-var normalMatrixUniform = gl.getUniformLocation(glProgram, "normalMatrix");
-var viewMatrixUniform  = gl.getUniformLocation(glProgram, "viewMatrix");
-var projMatrixUniform  = gl.getUniformLocation(glProgram, "projMatrix");
+	setupVertexShaderMatrix(normalMatrix,modelMatrix, glProgram){
+		var modelMatrixUniform = gl.getUniformLocation(glProgram, "modelMatrix");
+		var normalMatrixUniform = gl.getUniformLocation(glProgram, "normalMatrix");
+		var viewMatrixUniform  = gl.getUniformLocation(glProgram, "viewMatrix");
+		var projMatrixUniform  = gl.getUniformLocation(glProgram, "projMatrix");
 
-gl.uniformMatrix4fv(modelMatrixUniform, false, modelMatrix);
-gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
-gl.uniformMatrix4fv(viewMatrixUniform, false, viewMatrix);
-gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
+		gl.uniformMatrix4fv(modelMatrixUniform, false, modelMatrix);
+		gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
+		gl.uniformMatrix4fv(viewMatrixUniform, false, viewMatrix);
+		gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
+	}
 }
 
 //====================  Not mine =======================
