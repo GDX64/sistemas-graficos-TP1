@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-        <title>TP º1 - Ramiro Espada</title>        
+        <title>TP º1 - Ramiro Espada</title>
         <style>
             body{ background-color: grey; }
             canvas{ background-color: white; }
@@ -18,7 +18,7 @@
 
         <script type="text/javascript" src="js/gl-matrix.js"></script>
 		<script src="js/jquery-1.js"></script>
-		
+
 		<script src="js1/mod_camara.js"></script>
        	<script src="js1/mod_objetos.js"></script>
        	<script src="js1/mod_formas.js"></script>
@@ -29,7 +29,7 @@
        	<script src="js1/mod_matlab.js"></script>
        	<script src="js1/mod_claseObjeto3D.js"></script>
        	<script src="js1/mod_camara.js"></script>
- 
+
        <script>
 
             var mat4=glMatrix.mat4;
@@ -41,35 +41,35 @@
             glProgram = null,
             fragmentShader = null,
             vertexShader = null;
-                
+
             var vertexPositionAttribute = null,
             trianglesVerticeBuffer = null,
             vertexNormalAttribute = null,
             trianglesNormalBuffer = null,
             trianglesIndexBuffer = null;
-               
+
             var modelMatrix = mat4.create();
             var viewMatrix = mat4.create();
             var projMatrix = mat4.create();
             var normalMatrix = mat4.create();
-            
-            
-			function loadShader( url, callback ){				
-				
+
+
+			function loadShader( url, callback ){
+
 				var req = new XMLHttpRequest();
 				req.open( "GET", url );
 				req.onload = function (e) {
 					callback(e.target.responseText);
 				};
-				req.send();				
+				req.send();
 			};
 
 			var vs_source="";
 			var fs_source="";
 
-         
+
 			function loadVertexShader(){
-				loadShader("glsl/vertex1.glsl",function(code){			
+				loadShader("glsl/vertex1.glsl",function(code){
 					vs_source=code;
 				loadShader("glsl/fragment1.glsl",function(code){
 					fs_source=code;
@@ -77,45 +77,45 @@
 					})
 				})
 			};
-			
+
             function initWebGL(){
 
-                canvas = document.getElementById("mi-canvas");  
+                canvas = document.getElementById("mi-canvas");
 
                 try{
-                    gl = canvas.getContext("webgl");      
+                    gl = canvas.getContext("webgl");
 
                 }catch(e){
                     alert(  "Error: Your browser does not appear to support WebGL.");
                 }
 
                 if(gl) {
-				
+
                     setupWebGL();
                     initShaders();
                     setupBuffers();
                     setupVertexShaderMatrix();
-                    tick();   
+                    tick();
 
-                }else{    
+                }else{
                     alert(  "Error: Your browser does not appear to support WebGL.");
                 }
 
             }
-           
+
 
             function setupWebGL(){
                 gl.enable(gl.DEPTH_TEST);
 
                 //set the clear color
-                gl.clearColor(0.1, 0.1, 0.2, 1.0);     
-                gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);     
-    
+                gl.clearColor(0.1, 0.1, 0.2, 1.0);
+                gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
                 gl.viewport(0, 0, canvas.width, canvas.height);
 
                 // Matrix de Proyeccion Perspectiva
                 mat4.perspective(projMatrix,45, canvas.width / canvas.height, 0.1, 100.0);
-                
+
                 mat4.identity(modelMatrix);
                 // mat4.rotate(modelMatrix,modelMatrix, -1.57078, [1.0, 0.0, 0.0]);
 
@@ -123,17 +123,17 @@
   				//Uso la funcion:  lookAt(out, eye, center, up)
 				// mat4.lookAt(viewMatrix,eye=[0.0,20.0,40.0], center=[0,0,0],up=[0,1,0])
             }
-                    
-                    
+
+
             function initShaders() {
 
-                //compile shaders    
+                //compile shaders
                 vertexShader = makeShader(vs_source, gl.VERTEX_SHADER);
                 fragmentShader = makeShader(fs_source, gl.FRAGMENT_SHADER);
-                
+
                 //create program
                 glProgram = gl.createProgram();
-                
+
                 //attach and link shaders to the program
                 gl.attachShader(glProgram, vertexShader);
                 gl.attachShader(glProgram, fragmentShader);
@@ -142,11 +142,11 @@
                 if (!gl.getProgramParameter(glProgram, gl.LINK_STATUS)) {
                     alert("Unable to initialize the shader program.");
                 }
-                
+
                 //use program
                 gl.useProgram(glProgram);
             }
-            
+
             function makeShader(src, type){
                 //compile the vertex shader
                 var shader = gl.createShader(type);
@@ -177,13 +177,13 @@
 		var pos = getPosSuelo(nx,nz,xmin,xmax,zmin,zmax);
 		var normal =  getNormSuelo(nx,nz,xmin,xmax,zmin,zmax);
 		var index = getIndex(nx,nz);
-		
+
 		suelo.setGeometria(pos,normal,index);
 
 
 		//	Cielo
 
-        	var rows=128, cols=256;	
+        	var rows=128, cols=256;
 		var r=25.0
 
 		var pos = getPosCielo(rows,cols,r);
@@ -199,7 +199,7 @@
 
 
 	// Montaña rusa
-	
+
 
 
 
@@ -209,7 +209,7 @@
 	}
 
 	function setupVertexShaderMatrix(){
-			
+
                 var modelMatrixUniform = gl.getUniformLocation(glProgram, "modelMatrix");
                 var viewMatrixUniform  = gl.getUniformLocation(glProgram, "viewMatrix");
                 var projMatrixUniform  = gl.getUniformLocation(glProgram, "projMatrix");
@@ -219,47 +219,47 @@
                 gl.uniformMatrix4fv(viewMatrixUniform, false, viewMatrix);
                 gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
                 gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
-    }                  
-            
+    }
+
     function drawScene(){
-			
-                setupVertexShaderMatrix();
-                
+
+        setupVertexShaderMatrix();
+
 				// Draw Suelo:
 				suelo.dibujar()
-		
+
 				// Draw Cielo
-                cielo.dibujar();
-       	         
-		
+        cielo.dibujar();
+
+
     }
 
     function animate(){
-                
-                mat4.identity(modelMatrix);
-		
-				// Manejo de camara con mouse 
-   			 	if(isMouseDown) CamaraPos=rotarCamara();
-			 	mat4.lookAt(viewMatrix, eye=CamaraPos, center=[0,0,0],up=[1,1,0])
+
+				mat4.identity(modelMatrix);
+
+				// Manejo de camara con mouse
+				if(isMouseDown) CamaraPos=rotarCamara();
+				mat4.lookAt(viewMatrix, eye=CamaraPos, center=[0,0,0],up=[1,1,0])
 
 				//Operaciones sobre la matriz de vectores normales
-                mat4.identity(normalMatrix);
-                mat4.multiply(normalMatrix,viewMatrix,modelMatrix);     
+				mat4.identity(normalMatrix);
+				mat4.multiply(normalMatrix,viewMatrix,modelMatrix);
 				mat4.invert(normalMatrix,normalMatrix);
-                mat4.transpose(normalMatrix,normalMatrix);
-	  
+				mat4.transpose(normalMatrix,normalMatrix);
+
     }
-            
+
     function tick(){
 
-                requestAnimationFrame(tick);
-                drawScene();
+	      requestAnimationFrame(tick);
+	      drawScene();
 				animate();
 	}
 
 
     window.onload=loadVertexShader;
-	  
+
 
 
         </script>

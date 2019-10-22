@@ -24,7 +24,7 @@ var elevation = 0.01;
 
 var data_vector=create_plane_grid(ROWS_NUMBER,COLS_NUMBER);
 var strip_index=create_index_buffer(ROWS_NUMBER,COLS_NUMBER);
-
+var index = [ 0, 1, 2, 0, 2, 3, 0, 3, 4, 0, 4, 5, 0, 5, 6, 0, 6, 1 ];
 var rueda=new Obj3d(vertex_data,data_vector[0], strip_index, modelMatrix);
 mat4.rotate(rueda.preModelMatrix,rueda.preModelMatrix, Math.PI/2, [1.0, 0.0, 0.0]);
 scale_factor=1;
@@ -96,8 +96,8 @@ function animate_rueda(){
 		var tr2=mat4.create();
 		elevation+=0.05;
     rotate_angle += rotate_speed;
-    mat4.rotate(transformMatrix,transformMatrix, rotate_angle, [0.0, 1.0, 0.3])
-		//mat4.rotate(tr2,tr2, Math.sin(elevation)*0.3, [0.0, 0.0, 1.0]);
+    mat4.rotate(transformMatrix,transformMatrix, rotate_angle, [0.0, 1.0, 0.0])
+		mat4.rotate(tr2,tr2, Math.sin(elevation)*0.3, [0.0, 0.0, 1.0]);
 		mat4.multiply(rueda.modelMatrix, tr2, transformMatrix);
 
 }

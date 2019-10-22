@@ -1,7 +1,7 @@
 class Obj3d{
-  constructor(vertexData, normal, index, modelMatrix){
+  constructor(vertexData, color, index, modelMatrix){
     this.data=vertexData;
-    this.normal=normal;
+    this.color=color;
     this.index=index;
     this.modelMatrix=mat4.create();
 		mat4.copy(this.modelMatrix,modelMatrix);
@@ -42,22 +42,20 @@ class Obj3d{
 	this.drawMe(glProgram);
   }
   drawMe(glprogram){
-      setupVertexShaderMatrix(mat4.create(), this.finalMatrix, glProgram);
+      setupVertexShaderMatrix(this.finalMatrix, glProgram);
 
       this.vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
       gl.enableVertexAttribArray(this.vertexPositionAttribute);
       gl.bindBuffer(gl.ARRAY_BUFFER, this.trianglesVerticeBuffer);
       gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 
-      this.vertexNormalAttribute = gl.getAttribLocation(glProgram, "aVertexNormal");
-      gl.enableVertexAttribArray(this.vertexNormalAttribute);
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.trianglesNormalBuffer);
-      gl.vertexAttribPointer(this.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+      this.vertexColorAttribute = gl.getAttribLocation(glProgram, "aVertexColor");
+      gl.enableVertexAttribArray(this.vertexColorAttribute);
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.trianglesColorBuffer);
+      gl.vertexAttribPointer(this.vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
 
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.trianglesIndexBuffer);
-      //gl.drawElements( gl.TRIANGLES, this.trianglesIndexBuffer.number_vertex_point, gl.UNSIGNED_SHORT, 0);
 	  	gl.drawElements(gl.TRIANGLE_STRIP, this.trianglesIndexBuffer.number_vertex_point, gl.UNSIGNED_SHORT, 0);
-      //gl.drawArrays(gl.TRIANGLES, 0,6);
   }
   setupBuffers(gl){
 
@@ -65,9 +63,9 @@ class Obj3d{
 	  gl.bindBuffer(gl.ARRAY_BUFFER, this.trianglesVerticeBuffer);                   // activo el buffer
 	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.data), gl.STATIC_DRAW);   // cargo los datos en el buffer
 
-	  this.trianglesNormalBuffer = gl.createBuffer();
-	  gl.bindBuffer(gl.ARRAY_BUFFER, this.trianglesNormalBuffer);
-	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal), gl.STATIC_DRAW);
+	  this.trianglesColorBuffer = gl.createBuffer();
+	  gl.bindBuffer(gl.ARRAY_BUFFER, this.trianglesColorBuffer);
+	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color), gl.STATIC_DRAW);
 
     this.trianglesIndexBuffer = gl.createBuffer();
     this.trianglesIndexBuffer.number_vertex_point = this.index.length;
@@ -76,14 +74,12 @@ class Obj3d{
   }
 }
 
-function setupVertexShaderMatrix(normalMatrix,modelMatrix, glProgram){
+function setupVertexShaderMatrix(modelMatrix, glProgram){
 var modelMatrixUniform = gl.getUniformLocation(glProgram, "modelMatrix");
-var normalMatrixUniform = gl.getUniformLocation(glProgram, "normalMatrix");
 var viewMatrixUniform  = gl.getUniformLocation(glProgram, "viewMatrix");
 var projMatrixUniform  = gl.getUniformLocation(glProgram, "projMatrix");
 
 gl.uniformMatrix4fv(modelMatrixUniform, false, modelMatrix);
-gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
 gl.uniformMatrix4fv(viewMatrixUniform, false, viewMatrix);
 gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
 }
@@ -98,8 +94,8 @@ var gl = null,
 
 var vertexPositionAttribute = null,
     trianglesVerticeBuffer = null,
-    vertexNormalAttribute = null,
-    trianglesNormalBuffer = null;
+    vertexColorAttribute = null,
+    trianglesColorBuffer = null;
 
 var modelMatrix = mat4.create();
 mat4.identity(modelMatrix);
