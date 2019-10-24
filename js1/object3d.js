@@ -35,7 +35,6 @@ class Obj3d{
   	if (this.sons_length>0) {
 
 		for (var i=0;i<this.sons_length;i++){
-			console.log('fine');
 			this.sons[i].drawScene(glProgram,this.finalMatrix);
 		}
 	}
