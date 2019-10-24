@@ -37,6 +37,7 @@
 		<script src="js1/carr_data.js"></script>
 		<script src="js1/vertex_data.js"></script>
 		<script src="js1/carr_animation.js"></script>
+		<script src="js1/MR_animation.js"></script>
 
 
        <script>
@@ -104,9 +105,10 @@
                     initShaders();
                     setupBuffers();
                     setupVertexShaderMatrix();
-					rueda.setupBuffers(gl);
-					palo_rueda.setupBuffers(gl);
-					setup_sillas(gl);
+										rueda.setupBuffers(gl);
+										palo_rueda.setupBuffers(gl);
+										setup_sillas(gl);
+										setupMR(gl);
                     tick();
 
                 }else{
@@ -268,7 +270,8 @@
 
 	      requestAnimationFrame(tick);
 	      drawScene();
-				drawAll(); //esta funcion llama a los objectos que van a ser dibujados
+				drawMR(); //Dibuja la montana russa
+				drawAll(); //esta funcion llama a los objectos que van a ser dibujados en el carrocel
 				//Las funciones de animacion deben ser llamadas acá
 				animate_rueda();
 				animate_sillas();

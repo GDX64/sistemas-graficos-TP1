@@ -19,9 +19,12 @@ class Obj3d{
   add_son(obj){
       this.sons.push(obj);
   }
+
+
   hello(){
     console.log("hi, I'm alive");
   }
+
   drawScene(glProgram,fatherMatrix){
   	this.fatherMatrix=fatherMatrix;
 	this.finalMatrix=mat4.create();
@@ -164,4 +167,29 @@ function create_plane_grid(rows,cols){
 
 		//retorna el color y posicion de los buffers
 		return [position_buffer, color_buffer];
+}
+
+//Line OBJ
+
+class Line_obj extends Obj3d {
+  constructor(vertexData, normal, index, modelMatrix) {
+    super(vertexData, normal, index, modelMatrix);
+  }
+	drawMe(){
+
+	      this.setupVertexShaderMatrix(mat4.create(), this.finalMatrix, glProgram);
+
+	      this.vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
+	      gl.enableVertexAttribArray(this.vertexPositionAttribute);
+	      gl.bindBuffer(gl.ARRAY_BUFFER, this.trianglesVerticeBuffer);
+	      gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+	      this.vertexNormalAttribute = gl.getAttribLocation(glProgram, "aVertexNormal");
+	      gl.enableVertexAttribArray(this.vertexNormalAttribute);
+	      gl.bindBuffer(gl.ARRAY_BUFFER, this.trianglesNormalBuffer);
+	      gl.vertexAttribPointer(this.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+
+	      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.trianglesIndexBuffer);
+		  	gl.drawElements(gl.LINE_STRIP, this.trianglesIndexBuffer.number_vertex_point, gl.UNSIGNED_SHORT, 0);
+	}
 }

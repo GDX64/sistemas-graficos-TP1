@@ -30,17 +30,17 @@ function barrer(forma,tray,tray_tang,tray_binorm){
 	for (var i=0; i<m;i++){
 		norm  = vec3.CrossProd(forma.normal, tray.tangentes[i])
 		angulo= Math.acos( vec3.dot((forma.normal, tray.tangentes[i]))  / vec3.norm(forma.normal, tray.tangentes[i]) )
-		
+
 		M=mat4.create();
-		
-		scale(M,M,tray.escalado[i];
+
+		scale(M,M,tray.escalado[i]); //asi es
 		translate(M,M,tray.vertices[i]);
 		rotate(M,M,angulo, norm)
-		
+
 		for (j=0;j<n;j++){
-		
+
 			vertex.push( mat4.transform() );
-						
+
 		};
 	};
 }
@@ -49,12 +49,11 @@ function barrer(forma,tray,tray_tang,tray_binorm){
 //	pts(4,:)=ones(1,length(pts)); %agregando uma fila de 1 no final
 //	curve_pts(4,:)=ones(1,length(curve_pts));
 
-for i=1:length(grd)
-    transformMatrix=find_transform(grd(:,i),normal_vector); %encontrando rotacion
-    transformMatrix(:,end)=curve_pts(:,i)'; %Translacion 
-    transform_pts(:,:,i)=transformMatrix*pts;
-end
+//for i=1:length(grd)
+//    transformMatrix=find_transform(grd(:,i),normal_vector); %encontrando rotacion
+//    transformMatrix(:,end)=curve_pts(:,i)'; %Translacion
+//    transform_pts(:,:,i)=transformMatrix*pts;
+//end
 
 
-end
-
+//end
